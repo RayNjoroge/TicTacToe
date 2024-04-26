@@ -25,14 +25,17 @@ board = [
     [None, None, None]
 ]
 
+# Icons path
 icon_x = load_icon('icons/x.png', [PIXEL_WIDTH, PIXEL_WIDTH])
 icon_o = load_icon('icons/o.png', [PIXEL_WIDTH, PIXEL_WIDTH])
 grid = load_icon('icons/grid.png', [WINDOW_WIDTH, WINDOW_WIDTH])
 
+# Player variables
 player1 = 0
 player2 = 1
 player = player1
 
+# Function to handle  player's turn to play the game
 def play_turn(curr_player):
     curr_coordinate = pygame.math.Vector2(pygame.mouse.get_pos())
     normalized_coordinate = curr_coordinate // PIXEL_WIDTH
@@ -44,6 +47,7 @@ def play_turn(curr_player):
         global player
         player = 1 - player
 
+# Function to draw icons
 def draw_icons():
     for i, row in enumerate(board):
         for j, col in enumerate(board[i]):
@@ -52,31 +56,37 @@ def draw_icons():
             if board[i][j] == 1:
                 screen.blit(icon_x, (j * PIXEL_WIDTH, i * PIXEL_WIDTH))
 
+# Check if icons align
 def has_equal_icons(elements, game_player):
     for element in elements:
         if element != game_player:
             return False
     return True
 
+# Check if icons are aligned on horizontally
 def has_winning_row(game_player):
     return has_equal_icons(board[0], game_player) \
         or has_equal_icons(board[1], game_player) \
         or has_equal_icons(board[2], game_player)
 
+# Check if icons are aligned on vertically
 def has_winning_column(game_player):
     return has_equal_icons([board[0][0], board[1][0], board[2][0]], game_player) \
         or has_equal_icons([board[0][1], board[1][1], board[2][1]], game_player) \
         or has_equal_icons([board[0][2], board[1][2], board[2][2]], game_player)
 
+# Check if icons are aligned on diagonally
 def has_winning_diagonal(game_player):
     return has_equal_icons([board[0][0], board[1][1], board[2][2]], game_player) \
     or has_equal_icons([board[2][0], board[1][1], board[0][2]], game_player)
 
+# Check for alignment of icons to determine a win
 def is_winner(game_player):
     return has_winning_row(game_player) \
         or has_winning_column(game_player) \
         or has_winning_diagonal(game_player)
 
+# Check which player wins
 def check_victory():
     global winner_text
     
@@ -100,6 +110,7 @@ while running:
     play_turn(player)
     draw_icons()
     
+    # Print message to show winner
     if check_victory():
         screen.blit(winner_text, textRect)
 
